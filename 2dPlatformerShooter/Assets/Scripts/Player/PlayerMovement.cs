@@ -36,10 +36,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    void Move()
-    {
-        playerRb.
-    }
+    
 
 
 }//class
