@@ -8,6 +8,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float jumpForce;
 
+    [SerializeField]
+    private float moveSpeed = 8f;
+
+    private Animator anim;
+
+    private SpriteRenderer sr;
+
     private float moveDir;
 
     private Rigidbody2D playerRb;
@@ -18,13 +25,24 @@ public class PlayerMovement : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
+        anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
         moveDir = Input.GetAxis("Horizontal");
+        FlipPlayer();
+
+
+        //moveDir = Input.GetAxis("Vertical");
     }
 
+    private void FixedUpdate()
+    {
+        PlayerAnimation();
+        Move();
+    }
 
     public void Jump(InputAction.CallbackContext context)
     {
@@ -35,8 +53,37 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void Move()
+    {
+        //anim.SetBool("canMove", true);
+        transform.position = new Vector2(transform.position.x+moveSpeed*moveDir*Time.deltaTime, transform.position.y);
+    }
 
-    
+    void PlayerAnimation()
+    {
+        if (moveDir == 0)
+        {
+            anim.SetBool("canRun", false);
+        }else
+        {
+            anim.SetBool("canRun", true);
+        }
+    }
+
+
+    void FlipPlayer()
+    {
+        if (moveDir < 0)
+        {
+            sr.flipX = true;
+        }
+        else if (moveDir > 0)
+        {
+            sr.flipX = false;
+        }
+    }
+
+
 
 
 }//class
