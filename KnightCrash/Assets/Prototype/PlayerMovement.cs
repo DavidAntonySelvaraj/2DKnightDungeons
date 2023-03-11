@@ -5,19 +5,15 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float radius = 0.54f;
+    [SerializeField] private float radiusRaycast;
 
     private float moveVectorHorizontal, moveVectorVertical;
 
     private Rigidbody2D playerRb;
 
-    private Transform playerTransform;
-
-    private bool canMove;
 
     private void Awake()
     {
-        playerTransform = GetComponent<Transform>();
         playerRb = GetComponent<Rigidbody2D>();
     }
     private void FixedUpdate()
@@ -26,38 +22,48 @@ public class PlayerMovement : MonoBehaviour
         moveVectorVertical = Input.GetAxisRaw("Vertical");
 
         //Debug.Log("Move Vector"+" "+"("+moveVectorHorizontal+","+moveVectorVertical+")");
-        CanMovePlayer();
         MovePlayer();
     }
-    void CanMovePlayer()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(playerTransform.position, transform.right, radius, 3 << LayerMask.NameToLayer("Wall"));
-
-        //Debug.DrawRay(transform.position, transform.right, Color.white);
-
-        if (hit)
-        {
-            canMove = false;
-        }
-        else
-        {
-            canMove = true;
-        }
-    }
-
 
     void MovePlayer()
     {
-        if (canMove)
+        RaycastHit2D hitL = Physics2D.Raycast(transform.position, -transform.right, radiusRaycast,3<<LayerMask.NameToLayer("Wall"));
+        RaycastHit2D hitR = Physics2D.Raycast(transform.position, transform.right, radiusRaycast, 3 << LayerMask.NameToLayer("Wall"));
+        RaycastHit2D hitU = Physics2D.Raycast(transform.position, transform.up, radiusRaycast, 3 << LayerMask.NameToLayer("Wall"));
+        RaycastHit2D hitD = Physics2D.Raycast(transform.position, -transform.up, radiusRaycast, 3 << LayerMask.NameToLayer("Wall"));
+
+        if ( !hitR && moveVectorHorizontal == 1 )
         {
-            playerRb.velocity = new Vector2(moveVectorHorizontal*moveSpeed,moveVectorVertical*moveSpeed);
-            //Debug.Log("MOVE");
+
+            playerRb.velocity = new Vector2(moveSpeed,playerRb.velocity.y);
+
         }
-        else
+        if(!hitL && moveVectorHorizontal == -1)
         {
-            playerRb.velocity = new Vector2(0,0);
-            //Debug.Log("CANT MOVE");
+
+            playerRb.velocity = new Vector2(-moveSpeed, playerRb.velocity.y);
+
         }
+        if (!hitU && moveVectorVertical == 1)
+        {
+
+            playerRb.velocity = new Vector2( playerRb.velocity.x, moveSpeed);
+
+        }
+        if (!hitD && moveVectorVertical == -1)
+        {
+
+            playerRb.velocity = new Vector2( playerRb.velocity.x, -moveSpeed);
+
+        }
+
+
+
+    }
+
+    void MovePlayerRight()
+    {
+         playerRb.velocity = new Vector2(moveSpeed,playerRb.velocity.y);
     }
 
 }//class
