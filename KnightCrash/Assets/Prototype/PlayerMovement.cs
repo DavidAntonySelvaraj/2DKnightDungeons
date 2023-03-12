@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody2D>();
     }
+
+
     private void FixedUpdate()
     {
         moveVectorHorizontal = Input.GetAxisRaw("Horizontal");
@@ -32,28 +34,28 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hitU = Physics2D.Raycast(transform.position, transform.up, radiusRaycast, 3 << LayerMask.NameToLayer("Wall"));
         RaycastHit2D hitD = Physics2D.Raycast(transform.position, -transform.up, radiusRaycast, 3 << LayerMask.NameToLayer("Wall"));
 
-        if ( !hitR && moveVectorHorizontal == 1 )
+        if ( moveVectorHorizontal == 1  )
         {
 
-            playerRb.velocity = new Vector2(moveSpeed,playerRb.velocity.y);
+            MoveRight();
 
         }
-        if(!hitL && moveVectorHorizontal == -1)
+        else if( moveVectorHorizontal == -1 )
         {
 
-            playerRb.velocity = new Vector2(-moveSpeed, playerRb.velocity.y);
+            MoveLeft();
 
         }
-        if (!hitU && moveVectorVertical == 1)
+        else if ( moveVectorVertical == 1)
         {
 
-            playerRb.velocity = new Vector2( playerRb.velocity.x, moveSpeed);
+            MoveUp();
 
         }
-        if (!hitD && moveVectorVertical == -1)
+        else if (moveVectorVertical == -1)
         {
 
-            playerRb.velocity = new Vector2( playerRb.velocity.x, -moveSpeed);
+            MoveDown(); ;
 
         }
 
@@ -61,10 +63,39 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void MovePlayerRight()
+
+    void MoveRight()
     {
-         playerRb.velocity = new Vector2(moveSpeed,playerRb.velocity.y);
+        if (playerRb.velocity == new Vector2(0, 0))
+        {
+            playerRb.velocity = new Vector2(moveSpeed, playerRb.velocity.y);
+        }
     }
+
+    void MoveLeft()
+    {
+        if (playerRb.velocity == new Vector2(0, 0))
+        {
+            playerRb.velocity = new Vector2(-moveSpeed, playerRb.velocity.y);
+        }
+    }
+
+    void MoveUp()
+    {
+        if (playerRb.velocity == new Vector2(0, 0))
+        {
+            playerRb.velocity = new Vector2(playerRb.velocity.x, moveSpeed);
+        }
+    }
+
+    void MoveDown()
+    {
+        if (playerRb.velocity == new Vector2(0, 0))
+        {
+            playerRb.velocity = new Vector2(playerRb.velocity.x, -moveSpeed);
+        }
+    }
+    
 
 }//class
 
