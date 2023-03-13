@@ -16,16 +16,21 @@ public class PlayerMovement : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody2D>();
     }
+    private void Update()
+    {
+        
 
+        //Debug.Log("Move Vector"+" "+"("+moveVectorHorizontal+","+moveVectorVertical+")");
+        MovePlayer();
+    }
 
     private void FixedUpdate()
     {
         moveVectorHorizontal = Input.GetAxisRaw("Horizontal");
         moveVectorVertical = Input.GetAxisRaw("Vertical");
-
-        //Debug.Log("Move Vector"+" "+"("+moveVectorHorizontal+","+moveVectorVertical+")");
-        MovePlayer();
     }
+
+
 
     void MovePlayer()
     {
@@ -66,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     void MoveRight()
     {
-        if (playerRb.velocity == new Vector2(0, 0))
+        if (playerRb.velocity == new Vector2(0, 0) )
         {
             playerRb.velocity = new Vector2(moveSpeed, playerRb.velocity.y);
         }
